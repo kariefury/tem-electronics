@@ -15,11 +15,44 @@
 # limitations under the License.
 #
 import webapp2
+import os
+from google.appengine.ext.webapp import template
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
-
+        path = os.path.join(os.path.dirname(__file__), 'index.html')
+        motors = [{"name":"Small Motor", "url":"smallMotor"},{},{}]
+        luminence = [{"name":"Lights", "url":"lights"}, {"name":"White Space", "url":"whiteSpace"} ]
+		
+        this = {
+		    "directed": False, 
+		    "graph": [[
+		            "name", 
+		            "myGraph"]], 
+		    "nodes": [
+		        {
+		            "gate": "this", 
+		            "id": 1
+		        }
+		    ], 
+		    "links": [
+		        # {
+		        #     "source": 3, 
+		        #     "target": 2
+		        # }, 
+		        # {
+		        #     "source": 0, 
+		        #     "target": 3
+		        # }, 
+		        # {
+		        #     "source": 1, 
+		        #     "target": 3
+		        # }
+		    ], 
+		    "multigraph": False
+		}
+        
+        self.response.out.write(template.render(path,{ "this":this, "motors":motors }))
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
 ], debug=True)
